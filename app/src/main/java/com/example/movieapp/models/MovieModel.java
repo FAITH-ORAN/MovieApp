@@ -14,15 +14,18 @@ public class MovieModel implements Parcelable {
     private float vote_average;
     private String overview;
 
+    private  String original_language ;
+
     //constructor
 
-    public MovieModel(String title, String poster_path, String release_date, int id, float vote_average, String overview) {
+    public MovieModel(String title, String poster_path, String release_date, int id, float vote_average, String overview, String original_language) {
         this.title = title;
         this.poster_path = poster_path;
         this.release_date = release_date;
         this.id = id;
         this.vote_average = vote_average;
         this.overview = overview;
+        this.original_language = original_language;
     }
 
 
@@ -35,6 +38,7 @@ public class MovieModel implements Parcelable {
         id = in.readInt();
         vote_average = in.readFloat();
         overview = in.readString();
+        original_language = in.readString();
     }
 
     public static final Creator<MovieModel> CREATOR = new Creator<MovieModel>() {
@@ -73,6 +77,9 @@ public class MovieModel implements Parcelable {
         return overview;
     }
 
+    public String getOriginal_language() {
+        return original_language;
+    }
 
     @Override
     public int describeContents() {
@@ -87,5 +94,20 @@ public class MovieModel implements Parcelable {
         parcel.writeInt(id);
         parcel.writeFloat(vote_average);
         parcel.writeString(overview);
+        parcel.writeString(original_language);
+    }
+
+
+    @Override
+    public String toString() {
+        return "MovieModel{" +
+                "title='" + title + '\'' +
+                ", poster_path='" + poster_path + '\'' +
+                ", release_date='" + release_date + '\'' +
+                ", id=" + id +
+                ", vote_average=" + vote_average +
+                ", overview='" + overview + '\'' +
+                ", original_language='" + original_language + '\'' +
+                '}';
     }
 }
