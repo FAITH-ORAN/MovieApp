@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -84,19 +85,38 @@ public class MovieList extends  AppCompatActivity implements OnMovieListner {
 
     }
 
-
-
     // initializing recyclerViewer & add data
      private void ConfigureRecyclerView(){
         movieRecyclerViewAdapter = new MovieRecyclerView(this);
         recyclerView.setAdapter(movieRecyclerViewAdapter);
         recyclerView.setLayoutManager( new LinearLayoutManager(this));
+
+        //Pagination
+         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+             @Override
+             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                 super.onScrollStateChanged(recyclerView, newState);
+                 if(!recyclerView.canScrollVertically(1)){
+                     //we need to display the next search results
+                     movieListViewModel.searchNextPage();
+
+
+                 }
+             }
+         });
+
+
      }
 
 
     @Override
     public void onMovieClick(int position) {
         //Toast.makeText(this,"The Position" +position,Toast.LENGTH_SHORT).show();
+
+        //we need the id of movie to get the details
+        Intent intent = new Intent(this,MovieDetails.class);
+        intent.putExtra("movie",movieRecyclerViewAdapter.getSelectedMovie(position));
+        startActivity(intent);
     }
 
     @Override
