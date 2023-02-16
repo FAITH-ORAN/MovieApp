@@ -43,6 +43,8 @@ public class MovieList extends  AppCompatActivity implements OnMovieListner {
      // viewmodel
     private MovieListViewModel movieListViewModel;
 
+    boolean isPopular = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +65,32 @@ public class MovieList extends  AppCompatActivity implements OnMovieListner {
         ConfigureRecyclerView();
         // calling the observer
         ObserverAnyChange();
+
+        ObservePopularMovies();
+
+        //getting popular movies
+
+        movieListViewModel.searchMoviePop(1);
+
+    }
+
+    private void ObservePopularMovies() {
+        movieListViewModel.getPop().observe(this, new Observer<List<MovieModel>>() {
+            @Override
+            public void onChanged(List<MovieModel> movieModels) {
+                //observing
+
+                if(movieModels != null){
+                    for(MovieModel movieModel:movieModels){
+                        // Get the data
+                        Log.v("Tag","onChanged "+movieModel.getTitle());
+                        movieRecyclerViewAdapter.setmMovies(movieModels);
+                    }
+                }
+            }
+        });
+
+
 
     }
 
@@ -89,7 +117,7 @@ public class MovieList extends  AppCompatActivity implements OnMovieListner {
      private void ConfigureRecyclerView(){
         movieRecyclerViewAdapter = new MovieRecyclerView(this);
         recyclerView.setAdapter(movieRecyclerViewAdapter);
-        recyclerView.setLayoutManager( new LinearLayoutManager(this));
+        recyclerView.setLayoutManager( new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
 
         //Pagination
          recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -140,6 +168,13 @@ public class MovieList extends  AppCompatActivity implements OnMovieListner {
                   @Override
                   public boolean onQueryTextChange(String newText) {
                       return false;
+                  }
+              });
+
+              searchView.setOnSearchClickListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View view) {
+                      isPopular = false;
                   }
               });
     }

@@ -8,42 +8,58 @@
 
     <ImageView
         android:id="@+id/imageViewDetails"
-        android:layout_width="454dp"
-        android:layout_height="456dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/img" />
 
-    <TextView
-        android:id="@+id/textViewDetails"
-        android:layout_width="377dp"
-        android:layout_height="21dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        android:fontFamily="sans-serif"
-        android:text="TextView"
-        android:textSize="16sp"
+    <LinearLayout
+        android:layout_width="398dp"
+        android:layout_height="195dp"
+        android:background="@drawable/shadow_gradient"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewDetails"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewDetails" />
+        app:layout_constraintStart_toStartOf="parent">
 
-    <RatingBar
-        android:id="@+id/ratingBarDetails"
-        android:layout_width="241dp"
-        android:layout_height="41dp"
-        android:scaleX="1"
-        android:scaleY="1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewDetails" />
+        <TextView
+            android:id="@+id/textViewDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif"
+            android:text="TextView"
+            android:textColor="#E5F1F0"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewDetails" />
 
-    <TextView
-        android:id="@+id/textViewDescription"
-        android:layout_width="345dp"
-        android:layout_height="69dp"
-        android:text="TextView"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBarDetails"
-        tools:layout_editor_absoluteX="3dp" />
+        <RatingBar
+            android:id="@+id/ratingBarDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="1"
+            android:scaleY="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewDetails" />
+
+        <TextView
+            android:id="@+id/textViewDescription"
+            android:layout_width="345dp"
+            android:layout_height="69dp"
+            android:text="TextView"
+            android:textColor="#E5F1F0"
+            app:layout_constraintTop_toBottomOf="@+id/ratingBarDetails"
+            tools:layout_editor_absoluteX="3dp" />
+
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

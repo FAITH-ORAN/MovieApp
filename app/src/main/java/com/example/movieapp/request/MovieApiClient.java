@@ -21,13 +21,15 @@ import retrofit2.Response;
 
 public class MovieApiClient {
 
-    //live Data
+    //live Data for search
     private MutableLiveData<List<MovieModel>> mMovies;
-
     private static MovieApiClient instance;
-
     //Global Request
     private RetrieveMoviesRunnable retrieveMoviesRunnable;
+    //Live data for Popular movies
+    private MutableLiveData<List<MovieModel>> mMoviesPop;
+    //making popula run
+    private RetrieveMoviesRunnablePop retrieveMoviesRunnablePop;
 
     public static MovieApiClient getInstance(){
         if(instance == null){
@@ -38,13 +40,15 @@ public class MovieApiClient {
 
     private MovieApiClient(){
         mMovies = new MutableLiveData<>();
+        mMoviesPop = new MutableLiveData<>();
     }
-
 
     public LiveData<List<MovieModel>> getMovies(){
         return mMovies;
     }
-
+    public LiveData<List<MovieModel>> getMoviesPop(){
+        return mMoviesPop;
+    }
 
 
     //we are going to call this methode through the classes
@@ -65,7 +69,23 @@ public class MovieApiClient {
         }, 3000, TimeUnit.MILLISECONDS);
 
     }
+    public void searchMoviesPop(  int pageNumber){
+        if (retrieveMoviesRunnablePop != null) {
+            retrieveMoviesRunnablePop = null;
+        }
+        retrieveMoviesRunnablePop = new RetrieveMoviesRunnablePop(pageNumber);
 
+        final Future myHandler2 = AppExcutors.getInstance().netWorkIO().submit(retrieveMoviesRunnablePop);
+
+        AppExcutors.getInstance().netWorkIO().schedule(new Runnable() {
+            @Override
+            public void run() {
+                // cancel retrofit call if i dont have a resp in3s i cancel the req
+                myHandler2.cancel(true);
+            }
+        }, 1000, TimeUnit.MILLISECONDS);
+
+    }
         // retreiving data from RestAPi by runable class
         // with query the id & movie
 
@@ -94,7 +114,7 @@ public class MovieApiClient {
                       }
                       if(response.code()== 200){
                           List<MovieModel> list = new ArrayList<>(((MovieSearchResponse)response.body()).getMovies());
-                          if(pageNumber != 0){
+                          if(pageNumber == 1){
                               // send data to live data
                               //postValue:used for background thread
                               // setValue not of background
@@ -115,13 +135,7 @@ public class MovieApiClient {
                       e.printStackTrace();
                       mMovies.postValue(null);
                   }
-
-
-
             }
-
-
-
             //search Meyhod query
 
                 private Call<MovieSearchResponse> getMovies(String query, int pageNumber){
@@ -137,10 +151,69 @@ public class MovieApiClient {
                     cancelRequest = true;
                 }
 
-
-
-
          }
+
+    private class  RetrieveMoviesRunnablePop implements Runnable{
+
+        private String query;
+        private int pageNumber; //for displaying result
+        boolean cancelRequest;
+
+        public RetrieveMoviesRunnablePop(int pageNumber) {
+            this.pageNumber = pageNumber;
+            cancelRequest = false;
+        }
+
+        @Override
+        public void run(){
+
+            // get the rep obj
+            try{
+                Response response2 = getPop(pageNumber).execute();
+
+                if(cancelRequest){
+                    return;
+                }
+                if(response2.code()== 200){
+                    List<MovieModel> list = new ArrayList<>(((MovieSearchResponse)response2.body()).getMovies());
+                    if(pageNumber != 0){
+                        // send data to live data
+                        //postValue:used for background thread
+                        // setValue not of background
+
+                        mMoviesPop.postValue(list);
+                    }else{
+
+                        List<MovieModel> currentMovies = mMoviesPop.getValue();
+                        currentMovies.addAll(list);
+                        mMoviesPop.postValue(currentMovies);
+                    }
+                }else{
+                    String error =response2.errorBody().string();
+                    Log.v("Tag","Error"+error);
+                    mMoviesPop.postValue(null);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                mMoviesPop.postValue(null);
+            }
+
+        }
+
+        //getPop
+        private Call<MovieSearchResponse> getPop(int pageNumber){
+            return Servicey.getMovieApi().getPopular(
+                    Credentials.API_KEY,
+                    pageNumber
+
+            );
+        }
+        private void cancelRequest(){
+            Log.v("Tag", "cancel search Request");
+            cancelRequest = true;
+        }
+
+    }
 
 
 

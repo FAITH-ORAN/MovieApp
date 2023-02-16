@@ -19,6 +19,14 @@ public interface MovieApi {
             @Query("page") int page
     );
 
+   //get poplar movie
+    //https://api.themoviedb.org/3/movie/popular?api_key=a6211b6e7a381b9918f11ab74abc96ae&page=50
+    @GET("3/movie/popular")
+    Call<MovieSearchResponse> getPopular(
+            @Query("api_key") String key,
+            @Query("page") int page
+    );
+
 
      //by Id
     //https://api.themoviedb.org/3/movie/550?api_key=a6211b6e7a381b9918f11ab74abc96ae
