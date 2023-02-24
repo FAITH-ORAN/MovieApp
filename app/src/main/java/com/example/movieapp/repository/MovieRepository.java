@@ -38,6 +38,8 @@ public class MovieRepository {
     public LiveData<List<MovieModel>> getPop(){
         return movieApiClient.getMoviesPop();
     }
+
+
     
     //1 calling the methode in ripo
     public void searchMovieApi(String query, int pageNumber){

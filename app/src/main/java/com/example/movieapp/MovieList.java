@@ -71,9 +71,7 @@ public class MovieList extends  AppCompatActivity implements OnMovieListner {
         //getting popular movies
 
         movieListViewModel.searchMoviePop(1);
-
     }
-
     private void ObservePopularMovies() {
         movieListViewModel.getPop().observe(this, new Observer<List<MovieModel>>() {
             @Override
@@ -89,11 +87,7 @@ public class MovieList extends  AppCompatActivity implements OnMovieListner {
                 }
             }
         });
-
-
-
     }
-
     //Observer of data change
     private void ObserverAnyChange(){
         movieListViewModel.getMovies().observe(this, new Observer<List<MovieModel>>() {
@@ -110,9 +104,7 @@ public class MovieList extends  AppCompatActivity implements OnMovieListner {
                 }
             }
         });
-
     }
-
     // initializing recyclerViewer & add data
      private void ConfigureRecyclerView(){
         movieRecyclerViewAdapter = new MovieRecyclerView(this);
@@ -127,15 +119,10 @@ public class MovieList extends  AppCompatActivity implements OnMovieListner {
                  if(!recyclerView.canScrollVertically(1)){
                      //we need to display the next search results
                      movieListViewModel.searchNextPage();
-
-
                  }
              }
          });
-
-
      }
-
 
     @Override
     public void onMovieClick(int position) {
